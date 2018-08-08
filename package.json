@@ -1,0 +1,67 @@
+{
+  "name": "electron-forge-demo",
+  "productName": "electron-forge-demo",
+  "version": "1.0.0",
+  "description": "Electron 示例",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
+  },
+  "keywords": [],
+  "author": "zhangwei",
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "npm",
+        "asar": true,
+        "icon": "src/static/img/wallet.ico",
+        "platform": "win32",
+        "arch": "x64",
+        "win32metadata.requested-execution-level": "requireAdministrator",
+        "ignore": [
+          ".idea",
+          ".gitignore"
+        ]
+      },
+      "electronWinstallerConfig": {
+        "setupIcon": "src/static/img/wallet.ico",
+        "loadingGif": "src/static/img/加载.gif",
+        "iconUrl": "https://www.shareworld.io/download/icon.png"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "electron-forge-demo"
+      }
+    }
+  },
+  "dependencies": {
+    "electron-compile": "^6.4.3",
+    "electron-squirrel-startup": "^1.0.0"
+  },
+  "devDependencies": {
+    "electron-forge": "^5.2.2",
+    "electron-prebuilt-compile": "2.0.4"
+  }
+}

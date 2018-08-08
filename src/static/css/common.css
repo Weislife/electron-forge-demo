@@ -1,0 +1,166 @@
+
+.layui-layer {
+    border-radius: 8px !important;
+}
+
+.layui-layer-page .layui-layer-content {
+    background-color: #F8F8F8 !important;
+    border-radius: 0 0 15px 15px !important;
+}
+
+.layui-layer-page .layui-layer-title {
+    padding: 0px 0px !important;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px !important;
+    height: 54px !important;
+    line-height: 54px !important;
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.layui-layer-page .layui-layer-setwin {
+    position: absolute !important;
+    right: 15px !important;
+    top: 12px !important;
+}
+
+.layui-layer-page .layui-layer-setwin a {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.layui-layer-page .layui-layer-setwin .layui-layer-ico {
+    background: url('../img/关闭_dialog.png') no-repeat !important;
+}
+
+.layui-layer-iframe .layui-layer-content {
+    background-color: #F8F8F8 !important;
+    border-radius: 0 0 15px 15px !important;
+}
+
+.layui-layer-iframe .layui-layer-title {
+    padding: 0px 0px !important;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px !important;
+    height: 54px !important;
+    line-height: 54px !important;
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.layui-layer-iframe .layui-layer-setwin {
+    position: absolute !important;
+    right: 15px !important;
+    top: 12px !important;
+}
+
+.layui-layer-iframe .layui-layer-setwin a {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.layui-layer-iframe .layui-layer-setwin .layui-layer-ico {
+    background: url('../img/关闭_dialog.png') no-repeat !important;
+}
+
+.layui-layer-dialog .layui-layer-title {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.layui-form-select .layui-edge {
+    border-top-color: gray !important;
+}
+
+.layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+    background-color: unset !important;
+}
+
+.layui-select-title {
+    border: 1px solid #c4c9cc !important;
+    border-radius: 5px !important;
+}
+
+.layui-select-title > input {
+    border: none !important;
+    border-radius: 5px !important;
+}
+
+
+@font-face {
+    font-family: "iconfont";
+    src: url('iconfont.eot'); /* IE9*/
+    src: url('iconfont.eot#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('iconfont.woff') format('woff'), /* chrome, firefox */ url('iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/ url('iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 18px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+select, input, button, .min, .max, .close, .goBack, .goForward {
+    -webkit-app-region: no-drag;
+}
+
+.input-phone {
+    margin: 0 calc((100% - 300px) / 2);
+    width: 300px;
+    height: 38px;
+    background: url(../img/人.png) no-repeat 12px center;
+    border: 1px solid #c4c9cc;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.input-phone > input {
+    border: none !important;
+    height: 100%;
+    width: 84%;
+    margin-left: 35px;
+}
+
+.input-password {
+    margin: 0 calc((100% - 300px) / 2);
+    width: 300px;
+    height: 38px;
+    background: url(../img/锁.png) no-repeat 12px center;
+    border: 1px solid #c4c9cc;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.input-password > input {
+    border: none !important;
+    height: 100%;
+    width: 84%;
+    margin-left: 35px;
+}
+
+.input-amount {
+    margin: 0 calc((100% - 300px) / 2);
+    width: 300px;
+    height: 38px;
+    background: url(../img/金币.png) no-repeat 12px center;
+    border: 1px solid #c4c9cc;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.input-amount > input {
+    border: none !important;
+    height: 100%;
+    width: 84%;
+    margin-left: 35px;
+}
+
+.wallet_webview #wallet button {
+    background: no-repeat center center fixed;
+    border-style: none;
+    color: white;
+    height: 60px;
+    line-height: 60px;
+    width: 190px;
+}

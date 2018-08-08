@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html style="height: 100%; overflow: hidden;">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <style type="text/css">
+        .layui-select-title {
+            border: none !important;
+        }
+
+        .layui-select-title > input {
+            border-radius: 0px !important;
+            color: white;
+        }
+
+        .layui-form-select .layui-input {
+            background-color: #171a23 !important;
+        }
+
+        .layui-input {
+            height: 24px !important;
+        }
+    </style>
+</head>
+<body style="height: 100%; -webkit-app-region: no-drag;">
+<div id="header" style="height: 60px;">
+    <div style="height: 100%; background: url('../img/顶部.png') no-repeat -200px -200px fixed; background-size: cover;">
+        <div style="height: 100%; float: left; position: relative; left: 10px; width: 300px;">
+            <img id="logo" src="../img/logo.png"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span style="display:inline-block; height:100%; vertical-align:middle;"></span>
+            <img class="goBack" src="../img/左箭头暗.png"
+                 style="vertical-align: middle; width: 24px; height: 24px; line-height: 60px;"/>&nbsp;&nbsp;&nbsp;
+            <img class="goForward" src="../img/右箭头暗.png"
+                 style="vertical-align: middle; width: 24px; height: 24px; line-height: 60px;"/>
+        </div>
+        <div style="float: left; -webkit-app-region: no-drag;">
+            <ul>
+                <li id="index_li"
+                    style="display: inline-block; font-size: 20px; color: white; line-height: 60px; padding: 0 20px; background-color: #FF5722;">
+                    主页
+                </li>
+                <li id="wallet_li"
+                    style="display: inline-block; font-size: 20px; color: white; line-height: 60px; padding: 0 20px;">
+                    安全钱包
+                </li>
+            </ul>
+        </div>
+        <div style="height: 100%; float: right;">
+            <img src="../img/用户头像.png" style="vertical-align: middle; line-height: 60px;"/>
+            &nbsp;
+            <div class="layui-form" style="width: 130px; line-height: 60px; display: inline-block;">
+                <select lay-filter="account">
+                    <option selected></option>
+                    <option>切换账户</option>
+                </select>
+            </div>
+            &nbsp;
+            <img src="../img/竖线.png" style="vertical-align: middle;"/>
+            <span style="display:inline-block; height:100%; vertical-align:middle;"></span>
+            &nbsp;
+            <img class="min" src="../img/最小化_index.png"
+                 style="vertical-align: middle; width: 24px; height: 24px;"/>
+            <span style="display:inline-block; height:100%; vertical-align:middle;"></span>
+            &nbsp;
+            <img class="max" src="../img/最大化_index.png"
+                 style="vertical-align: middle; width: 24px; height: 24px;"/>
+            <span style="display:inline-block; height:100%; vertical-align:middle;"></span>
+            &nbsp;
+            <img class="close" src="../img/关闭_index.png"
+                 style="vertical-align: middle; width: 24px; height: 24px;"/>
+            <span style="display:inline-block; height:100%; vertical-align:middle;"></span>&nbsp;&nbsp;
+        </div>
+    </div>
+</div>
+<webview id="webview" src="./index_webview.html" nodeIntegration
+         style="display:inline-flex; width: 100%; height: calc(100% - 60px); -webkit-app-region: no-drag;"></webview>
+<script src="../lib/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.extend({
+        utils: '../js/utils'
+    });
+
+    layui.use(['jquery', 'form', 'utils'], function () {
+        const $ = layui.jquery
+            , form = layui.form
+            , utils = layui.utils;
+
+        const TMP = {maximized: false};
+
+        document.getElementById("webview").addEventListener('console-message', e => {
+            console.log('webview: ' + e.message);
+        });
+
+        if (utils.getQueryString('phone') !== null) {
+            $("#header select option:selected").text(utils.getQueryString('phone'));
+            form.render('select');
+        }
+
+        $('.close').click(function () {
+            require('electron').remote.getCurrentWindow().close();
+        });
+
+        $('.min').click(function () {
+            require('electron').remote.getCurrentWindow().minimize();
+        });
+
+        $('.max').click(function () {
+            if (TMP.maximized) {
+                TMP.maximized = false;
+                require('electron').remote.getCurrentWindow().unmaximize();
+            } else {
+                TMP.maximized = true;
+                require('electron').remote.getCurrentWindow().maximize();
+            }
+        });
+
+        document.getElementById("webview").addEventListener('did-navigate', function (e) {
+            if (document.getElementById("webview").canGoBack()) {
+                $('.goBack').attr('src', '../img/左箭头亮.png');
+            } else {
+                $('.goBack').attr('src', '../img/左箭头暗.png');
+            }
+
+            if (document.getElementById("webview").canGoForward()) {
+                $('.goForward').attr('src', '../img/右箭头亮.png');
+            } else {
+                $('.goForward').attr('src', '../img/右箭头暗.png');
+            }
+
+        });
+
+        document.getElementById("webview").addEventListener('did-navigate-in-page', function (e) {
+            if (document.getElementById("webview").canGoBack()) {
+                $('.goBack').attr('src', '../img/左箭头亮.png');
+            } else {
+                $('.goBack').attr('src', '../img/左箭头暗.png');
+            }
+
+            if (document.getElementById("webview").canGoForward()) {
+                $('.goForward').attr('src', '../img/右箭头亮.png');
+            } else {
+                $('.goForward').attr('src', '../img/右箭头暗.png');
+            }
+
+
+        });
+
+        document.getElementById("webview").addEventListener('new-window', (event) => {
+            const protocol = require('url').parse(event.url).protocol;
+            if (protocol === 'http:' || protocol === 'https:') {
+                console.log(event.url);
+                const shell = require('electron').shell;
+                shell.openExternal(event.url);
+            }
+        });
+
+        $('.goBack').click(function () {
+            document.getElementById("webview").goBack();
+        });
+
+        $('.goForward').click(function () {
+            document.getElementById("webview").goForward();
+        });
+
+        document.getElementById("webview").addEventListener('did-navigate', event => {
+            $('#header ul li').css('background-color', '');
+            if (event.url.indexOf('index_webview') > -1) {
+                $('#index_li').css('background-color', '#FF5722');
+            } else if (event.url.indexOf('wallet_webview') > -1) {
+                $('#wallet_li').css('background-color', '#FF5722');
+            }
+        });
+
+        $('#header ul li').click(function () {
+            if ($.trim($(this).text()) === '主页') {
+                document.getElementById("webview").src = './index_webview.html';
+            } else if ($.trim($(this).text()) === '安全钱包') {
+                document.getElementById("webview").src = './wallet_webview.html';
+            }
+        });
+
+
+        $('body').bind("mousedown", function (e) {
+            if ($(e.target).closest('dd').length == 0) {
+                if ($('#header .layui-form-selected dl').css('display') === 'block') {
+                    $('#header .layui-form').children('div').toggleClass('layui-form-selected');
+                }
+            }
+        });
+
+        form.on('select(account)', function (data) {
+            if (data.value === '切换账户') {
+                require('electron').remote.getCurrentWindow().setSize(1000, 600);
+                require('electron').remote.getCurrentWindow().center();
+                require('electron').remote.getCurrentWindow().loadURL(`file://${__dirname}/login.html?switchUser=true`);
+            }
+
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

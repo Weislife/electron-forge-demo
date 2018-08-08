@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html style="height: 100%; overflow: hidden;">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" href="../css/common.css">
+</head>
+<body class="wallet_webview" style="height: 100%;">
+<div style="height: 100%;">
+    <div class="layui-row" style="height: 100%;">
+        <div style="width: 300px; height: 100%; float: left; background: url('../img/侧面.png') no-repeat -200px -100px fixed; background-size: cover;">
+            <br/>
+            <br/>
+            <div style="position: absolute; bottom: 50px; width: inherit;">
+                <div style="text-align: center; line-height: 50px;">
+                    <div style="margin: 0 50px; border-radius: 20px; background-color: #343a4e;">
+                        <img src="../img/swc.png">&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span style="vertical-align: middle; color: white; font-size: 30px;">0</span>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <div style="width: inherit;">
+                    <div style="text-align: center;">
+                        <img src="../img/copyright.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="width: calc(100% - 300px); height: 100%; float: left;">
+            <div id="content" style="height: 100%;">
+                <div id="wallet"
+                     style="height: 100%; background: url('../img/中1.png') no-repeat center center fixed; background-size: 101% 102%;">
+                    <div style="position: relative; top: 12%; text-align: center;">
+                        <div id="wallet_bg_1">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div>
+                            <button id="transfer" class="layui-btn layui-btn-primary"
+                                    style="background: url('../img/圆角矩形3.png'); background-size: cover;">
+                                转账
+                            </button>
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="transfer_dialog" style="display: none;">
+    <div class="layui-form" style="text-align: center;">
+        <br/>
+        <br/>
+        <div class="input-phone">
+            <input name="transfer_dialog_to_account" type="text"
+                   placeholder="收款人钱包账户"
+                   autocomplete="off">
+        </div>
+        <br/>
+        <div class="input-amount">
+            <input name="transfer_dialog_amount" type="text"
+                   placeholder="转账金额"
+                   autocomplete="off"
+                   onkeypress="return (/[\d.]/.test(String.fromCharCode(event.keyCode)));"
+                   style="ime-mode:disabled;">
+        </div>
+        <br/>
+        <div class="input-password" style="border: 1px solid #c4c9cc;">
+            <input name="transfer_dialog_wallet_password" type="password"
+                   placeholder="钱包密码"
+                   autocomplete="off">
+        </div>
+        <br/>
+        <br/>
+        <div>
+            <button class="layui-btn layui-btn-danger"
+                    style="height: 40px;line-height: 40px;padding: 0 120px;" lay-submit
+                    lay-filter="transfer_filter">
+                确认转账
+            </button>
+        </div>
+    </div>
+</div>
+<script src="../lib/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.extend({
+        utils: '../js/utils'
+    });
+
+    layui.use(['jquery', 'layer', 'form', 'utils'], function () {
+        const $ = layui.jquery
+            , layer = layui.layer
+            , form = layui.form
+            , utils = layui.utils;
+
+
+    });
+</script>
+<script src="../js/wallet.js"></script>
+</body>
+</html>

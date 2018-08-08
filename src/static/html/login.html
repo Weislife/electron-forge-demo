@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <style type="text/css">
+        .layui-form-checkbox[lay-skin=primary] span {
+            padding-right: 0px !important;
+        }
+
+        .layui-form-checkbox span {
+            padding: 0 0 0 10px !important;
+        }
+    </style>
+</head>
+<body style="height: 100%; -webkit-app-region: drag;">
+<div style="height: 100%;">
+    <div class="layui-row" style="height: 100%;">
+        <div id="left_content" class="layui-col-sm4" style="height: 100%;">
+            <div style="height: 20%;"></div>
+            <div style="height: 65%;">
+                <p style="text-align: center; font-size: 32px;">登录</span></p>
+                <br/>
+                <br/>
+                <div class="layui-form">
+                    <div style="margin: 0 calc((100% - 300px) / 2);">
+                        <select name="country" style="width: 300px;">
+                            <option value="86" selected>中国</option>
+                        </select>
+                    </div>
+                    <br/>
+                    <div class="input-phone">
+                        <input name="phone" type="text"
+                               placeholder="请输入手机号码"
+                               autocomplete="off">
+                    </div>
+                    <br/>
+                    <div class="input-password">
+                        <input name="password" type="password"
+                               placeholder="请输入密码"
+                               autocomplete="off">
+                    </div>
+                    <br/>
+                    <br/>
+                    <div style="margin: 0 calc((100% - 300px) / 2); -webkit-app-region: no-drag;">
+                        <div style="display: inline;">
+                            <input type="checkbox" name="savePassword" title="保存密码" lay-skin="primary"
+                                   lay-filter="savePasswordFilter">
+                        </div>
+                        <div style="float: right;">
+                            <input type="checkbox" name="autoLogin" title="自动登录" lay-skin="primary"
+                                   lay-filter="autoLoginFilter">
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div style="margin: 0 calc((100% - 300px) / 2);">
+                        <button class="layui-btn layui-btn-danger"
+                                style="height: 40px; line-height: 40px; width: 100%;" lay-submit
+                                lay-filter="login">
+                            登录
+                        </button>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+            <div style="height: 15%;">
+                <div class="layui-row">
+                    <div class="layui-col-xs4">
+                        <p style="font-size: 18px;">
+                            &nbsp;&nbsp;
+                            <a id="register"
+                               style="color: #1E9FFF; text-decoration: none; border-bottom: 1px solid #1E9FFF; cursor:pointer; -webkit-app-region: no-drag;">注册</a>
+                        </p>
+                    </div>
+                    <div class="layui-col-xs4">
+                        <div>&nbsp;</div>
+                    </div>
+                    <div class="layui-col-xs4">
+                        <p style="font-size: 18px; float: right;">
+                            <a id="findPassword"
+                               style="color: #1E9FFF; text-decoration: none; border-bottom: 1px solid #1E9FFF; cursor:pointer; -webkit-app-region: no-drag;">找回密码</a>
+                            &nbsp;&nbsp;
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm8" style="height: 100%;">
+            <img src="../img/图层_login.png" style="width:100%; height: 100%;display: block;"/>
+            <img class="min" src="../img/最小化.png"
+                 style="position: absolute; top: 5px; right: 40px; width: 30px; height: 30px;"/>
+            <img class="close" src="../img/关闭.png"
+                 style="position: absolute; top: 5px; right: 10px; width: 30px; height: 30px;"/>
+        </div>
+    </div>
+</div>
+<script src="../lib/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.extend({
+        utils: '../js/utils'
+    });
+
+    layui.use(['jquery', 'form', 'utils'], function () {
+        const $ = layui.jquery
+            , form = layui.form
+            , utils = layui.utils;
+
+        const user = require('electron').remote.require(utils.node_module_path.join(__dirname, '../../lib/user'));
+
+        form.on('submit(login)', async function (data) {
+            const country = $.trim(data.field.country);
+            const phone = $.trim(data.field.phone);
+            const password = $.trim(data.field.password);
+            const savePassword = data.field.savePassword === 'on' ? true : false;
+            const autoLogin = data.field.autoLogin === 'on' ? true : false;
+
+            if (!phone) {
+                utils.layer_msg('left_content', {msg: '必填项不能为空'});
+                $('input[name="phone"]').focus();
+                return false;
+            }
+
+            if (!password) {
+                utils.layer_msg('left_content', {msg: '必填项不能为空'});
+                $('input[name="password"]').focus();
+                return false;
+            }
+
+            const phone_reg = /^1[0-9]{10}$/;
+            if (country === '86' && !phone_reg.test(phone)) {
+                utils.layer_msg('left_content', {msg: '手机号码格式不对'});
+                return false;
+            }
+
+            if (password.length < 6) {
+                utils.layer_msg('left_content', {msg: '密码长度不能低于6位'});
+                return false;
+            }
+
+            if (utils.containChinaChar(password)) {
+                utils.layer_msg('left_content', {msg: '密码中不能含有中文字符'});
+                return false;
+            }
+
+            /*$.ajax({
+                type: "post",
+                url: utils.config.api_host_port + '/v1/api/user/login',
+                cache: false,
+                contentType: 'application/x-www-form-urlencoded',
+                dataType: 'json',
+                timeout: 5000,
+                data: {
+                    account: country + phone,
+                    pwd: password,
+                },
+                success: function (data) {
+                    if (data.err_code === 0) {
+                        localStorage.setItem("token", data.data);*/
+                        user.save_login(country, phone, password, savePassword, autoLogin);
+
+                        setTimeout(function () {
+                            const screenSize = require('electron').remote.screen.getPrimaryDisplay().workAreaSize;
+
+                            let width = Math.round(0.6 * screenSize.width);
+                            let height = Math.round(0.7 * screenSize.height);
+                            if (height < 800) {
+                                width = Math.round(0.7 * screenSize.width);
+                                height = Math.round(0.8 * screenSize.height);
+                            }
+                            require('electron').remote.getCurrentWindow().setSize(width, height);
+                            require('electron').remote.getCurrentWindow().center();
+                            require('electron').remote.getCurrentWindow().loadURL(`file://${__dirname}/index.html` + '?phone=' + phone);
+                        }, 1000);
+                    /*} else {
+                        utils.layer_msg('left_content', {msg: data.message || '登录失败'});
+                    }
+                },
+                complete: function (XMLHttpRequest, textStatus) {
+                },
+                error: function () {
+                    utils.layer_msg('left_content', {msg: '登录失败'});
+                }
+            });*/
+
+            return false;
+        });
+
+        if (utils.getQueryString('phone') !== null) {
+            $('input[name="phone"]').val(utils.getQueryString('phone'));
+        } else {
+            const login_info = user.get_login();
+            if (login_info.code === 1) {
+                $('input[name="phone"]').val(login_info.user.phone);
+                if (login_info.user.autoLogin) {// 自动登录
+                    $('input[name="password"]').val(login_info.user.password);
+
+                    $('input[name="autoLogin"]').prop("checked", true);
+                    $('input[name="savePassword"]').prop("checked", true);
+
+                    if (!utils.getQueryString('switchUser')) {
+                        $('button').trigger('click');
+                    }
+                } else {
+                    $('input[name="autoLogin"]').prop("checked", false);
+                    if (login_info.user.savePassword) {// 记住密码
+                        $('input[name="password"]').val(login_info.user.password);
+                        $('input[name="savePassword"]').prop("checked", true);
+                    } else {
+                        $('input[name="savePassword"]').prop("checked", false);
+                    }
+                }
+
+                form.render('checkbox');
+            }
+        }
+
+        $('.close').click(function () {
+            require('electron').remote.getCurrentWindow().close();
+        });
+
+        $('.min').click(function () {
+            require('electron').remote.getCurrentWindow().minimize();
+        });
+
+        $('#register').click(function () {
+            require('electron').remote.getCurrentWindow().loadURL(`file://${__dirname}/register.html`);
+        });
+
+        $('#findPassword').click(function () {
+            require('electron').remote.getCurrentWindow().loadURL(`file://${__dirname}/find_password.html`);
+        });
+
+        form.on('checkbox(savePasswordFilter)', function (data) {
+            let autoLogin = 'null';
+            if (!data.elem.checked) {
+                $('input[name="autoLogin"]').prop("checked", false);
+                form.render('checkbox');
+                autoLogin = false;
+            }
+
+            const country = $('select[name="country"]').val();
+            const phone = $.trim($('input[name="phone"]').val());
+            const savePassword = data.elem.checked;
+            user.update_login_assist_info(country, phone, savePassword, autoLogin);
+        });
+
+        form.on('checkbox(autoLoginFilter)', function (data) {
+            let savePassword = 'null';
+            if (data.elem.checked) {
+                $('input[name="savePassword"]').prop("checked", true);
+                form.render('checkbox');
+                savePassword = true;
+            } else {
+                savePassword = false;
+            }
+
+            const country = $('select[name="country"]').val();
+            const phone = $.trim($('input[name="phone"]').val());
+            const autoLogin = data.elem.checked;
+            user.update_login_assist_info(country, phone, savePassword, autoLogin);
+        });
+
+    });
+</script>
+</body>
+</html>

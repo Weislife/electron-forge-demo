@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" href="../css/common.css">
+</head>
+<body>
+<div style="text-align: center;">
+    <br/>
+    <p style="font-size: 24px; color: #9f9fa3;">更新</p>
+    <br/>
+    <p id="msg" style="color: #9f9fa3;"></p>
+    <br/>
+    <br/>
+    <button id="restartNow" class="layui-btn layui-btn-danger" style="height: 40px;line-height: 40px;padding: 0 40px;">
+        现在重启
+    </button>
+    <button id="restartLater" class="layui-btn" style="height: 40px;line-height: 40px;padding: 0 40px;">
+        稍后重启
+    </button>
+</div>
+<script src="../lib/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['jquery'], function () {
+        const $ = layui.jquery;
+
+        //获取url中的参数
+        function getUrlParam(name) {
+            const reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            const r = window.location.search.substr(1).match(reg); //匹配目标参数
+            if (r !== null) return decodeURI(r[2]); //decodeURI参数内容。
+            return null; //返回参数值
+        }
+
+        $('#msg').text(getUrlParam('msg'));
+
+        $('#restartNow').click(function () {
+            const {ipcRenderer} = require('electron');
+            ipcRenderer.send('updateNow');
+        });
+
+        $('#restartLater').click(function () {
+            require('electron').remote.getCurrentWindow().close();
+        });
+
+    });
+</script>
+</body>
+</html>
